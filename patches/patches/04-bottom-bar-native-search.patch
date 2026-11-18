@@ -1,0 +1,699 @@
+--- a/app/revanced/extension/music/patches/navigation/NavigationPatch.smali
++++ b/app/revanced/extension/music/patches/navigation/NavigationPatch.smali
+@@ -19,6 +19,8 @@
+     .end annotation
+ .end field
+ 
++.field public static nativeSearchView:Landroid/view/View;
++
+ 
+ # direct methods
+ .method public static synthetic $r8$lambda$6ScuUL0-LbA45vktZ6d_Bz_JBrM(Ljava/lang/Runnable;Landroid/view/View;)V
+@@ -168,13 +170,13 @@
+ .end method
+ 
+ .method public static filterAndReorderTabs(Ljava/util/List;)Ljava/util/List;
+-    .locals 7
++    .locals 8
+     .param p0    # Ljava/util/List;
+         .annotation build Landroidx/annotation/Nullable;
+         .end annotation
+     .end param
+ 
+-    if-eqz p0, :cond_6
++    if-eqz p0, :cond_8
+ 
+     invoke-interface {p0}, Ljava/util/List;->isEmpty()Z
+ 
+@@ -190,6 +192,8 @@
+     invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+ 
+     const/4 v1, 0x0
++
++    move-object v7, v1
+ 
+     move-object v2, v1
+ 
+@@ -205,7 +209,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_3
++    if-eqz v5, :cond_4
+ 
+     invoke-interface {v4}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+ 
+@@ -236,6 +240,19 @@
+     goto :goto_0
+ 
+     :cond_2
++    const-string v1, "FEmusic_home"
++
++    invoke-virtual {v6, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_3
++
++    move-object v7, v5
++
++    goto :goto_0
++
++    :cond_3
+     const-string v1, "FEmusic_explore"
+ 
+     invoke-virtual {v6, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+@@ -248,30 +265,35 @@
+ 
+     goto :goto_0
+ 
+-    :cond_3
+-    if-eqz v2, :cond_4
++    :cond_4
++    if-eqz v2, :cond_5
+ 
+     invoke-virtual {v0, v2}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+ 
+-    :cond_4
+-    if-eqz v3, :cond_5
++    :cond_5
++    if-eqz v7, :cond_6
++
++    invoke-virtual {v0, v7}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
++
++    :cond_6
++    if-eqz v3, :cond_7
+ 
+     invoke-virtual {v0, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+ 
+-    :cond_5
++    :cond_7
+     invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_7
++    if-eqz v1, :cond_9
+ 
+     return-object p0
+ 
+-    :cond_6
++    :cond_8
+     :goto_1
+     return-object p0
+ 
+-    :cond_7
++    :cond_9
+     return-object v0
+ .end method
+ 
+@@ -282,7 +304,24 @@
+         .end annotation
+     .end param
+ 
++    sget-object v0, Lapp/revanced/extension/music/patches/navigation/NavigationPatch;->lastYTNavigationEnumName:Ljava/lang/String;
++
++    const-string v1, "TAB_HOME"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    const/4 v0, 0x0
++
++    invoke-virtual {p0, v0}, Landroid/view/View;->setVisibility(I)V
++
++    return-void
++
+     .line 59
++    :cond_0
+     sget-object v0, Lapp/revanced/extension/music/settings/Settings;->HIDE_NAVIGATION_BAR:Lapp/revanced/extension/shared/settings/BooleanSetting;
+ 
+     invoke-virtual {v0}, Lapp/revanced/extension/shared/settings/BooleanSetting;->get()Ljava/lang/Boolean;
+@@ -293,13 +332,13 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
+ 
+     move-result-object v0
+ 
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     .line 60
+     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
+@@ -315,7 +354,7 @@
+     return-void
+ 
+     .line 64
+-    :cond_0
++    :cond_1
+     invoke-static {}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->values()[Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;
+ 
+     move-result-object v0
+@@ -325,7 +364,7 @@
+     const/4 v2, 0x0
+ 
+     :goto_0
+-    if-ge v2, v1, :cond_3
++    if-ge v2, v1, :cond_4
+ 
+     aget-object v3, v0, v2
+ 
+@@ -340,21 +379,21 @@
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_2
++    if-eqz v4, :cond_3
+ 
+     .line 66
+     invoke-static {v3}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->-$$Nest$fgetreplace(Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;)Z
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_1
++    if-eqz v4, :cond_2
+ 
+     .line 67
+     invoke-static {v3}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->-$$Nest$fgetonClickAction(Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;)Ljava/lang/Runnable;
+ 
+     move-result-object v4
+ 
+-    if-eqz v4, :cond_1
++    if-eqz v4, :cond_2
+ 
+     .line 69
+     new-instance v5, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$$ExternalSyntheticLambda1;
+@@ -373,19 +412,19 @@
+     invoke-static {v5, v6, v7}, Lapp/revanced/extension/shared/utils/Utils;->runOnMainThreadDelayed(Ljava/lang/Runnable;J)V
+ 
+     .line 73
+-    :cond_1
++    :cond_2
+     invoke-static {v3}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->-$$Nest$fgethidden(Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;)Z
+ 
+     move-result v3
+ 
+     invoke-static {v3, p0}, Lapp/revanced/extension/shared/utils/Utils;->hideViewUnderCondition(ZLandroid/view/View;)V
+ 
+-    :cond_2
++    :cond_3
+     add-int/lit8 v2, v2, 0x1
+ 
+     goto :goto_0
+ 
+-    :cond_3
++    :cond_4
+     return-void
+ .end method
+ 
+@@ -552,7 +591,21 @@
+ .method public static replaceNavigationIcon(I)I
+     .locals 5
+ 
++    const v0, 0x7f0808c5
++
++    if-eq p0, v0, :cond_0
++
++    const v0, 0x7f080a10
++
++    if-ne p0, v0, :cond_1
++
++    :cond_0
++    const p0, 0x7f080a65
++
++    return p0
++
+     .line 100
++    :cond_1
+     invoke-static {}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->values()[Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;
+ 
+     move-result-object v0
+@@ -562,7 +615,7 @@
+     const/4 v2, 0x0
+ 
+     :goto_0
+-    if-ge v2, v1, :cond_2
++    if-ge v2, v1, :cond_4
+ 
+     aget-object v3, v0, v2
+ 
+@@ -571,36 +624,36 @@
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_1
++    if-eqz v4, :cond_3
+ 
+     invoke-static {v3}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->-$$Nest$fgetunSelectedDrawableId(Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;)I
+ 
+     move-result v4
+ 
+-    if-eq p0, v4, :cond_0
++    if-eq p0, v4, :cond_2
+ 
+     invoke-static {v3}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->-$$Nest$fgetselectedDrawableId(Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;)I
+ 
+     move-result v4
+ 
+-    if-ne p0, v4, :cond_1
++    if-ne p0, v4, :cond_3
+ 
+     .line 103
+-    :cond_0
++    :cond_2
+     invoke-static {v3}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->-$$Nest$fgetreplaceDrawableId(Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;)I
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_1
++    if-eqz v3, :cond_3
+ 
+     return v3
+ 
+-    :cond_1
++    :cond_3
+     add-int/lit8 v2, v2, 0x1
+ 
+     goto :goto_0
+ 
+-    :cond_2
++    :cond_4
+     return p0
+ .end method
+ 
+@@ -611,7 +664,26 @@
+         .end annotation
+     .end param
+ 
++    sget-object v0, Lapp/revanced/extension/music/patches/navigation/NavigationPatch;->lastYTNavigationEnumName:Ljava/lang/String;
++
++    const-string v1, "TAB_HOME"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    const-string v0, "Search"
++
++    invoke-static {p0, v0}, Lapp/revanced/extension/shared/utils/Utils;->newSpanUsingStylingOfAnotherSpan(Landroid/text/Spanned;Ljava/lang/CharSequence;)Landroid/text/SpannableString;
++
++    move-result-object p0
++
++    return-object p0
++
+     .line 114
++    :cond_0
+     invoke-static {}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->values()[Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;
+ 
+     move-result-object v0
+@@ -621,7 +693,7 @@
+     const/4 v2, 0x0
+ 
+     :goto_0
+-    if-ge v2, v1, :cond_1
++    if-ge v2, v1, :cond_2
+ 
+     aget-object v3, v0, v2
+ 
+@@ -636,13 +708,13 @@
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_0
++    if-eqz v4, :cond_1
+ 
+     invoke-static {v3}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->-$$Nest$fgetreplace(Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;)Z
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_0
++    if-eqz v4, :cond_1
+ 
+     .line 116
+     invoke-static {v3}, Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;->-$$Nest$fgetlabel(Lapp/revanced/extension/music/patches/navigation/NavigationPatch$NavigationButton;)Ljava/lang/String;
+@@ -654,7 +726,7 @@
+ 
+     move-result v4
+ 
+-    if-nez v4, :cond_0
++    if-nez v4, :cond_1
+ 
+     .line 118
+     invoke-static {p0, v3}, Lapp/revanced/extension/shared/utils/Utils;->newSpanUsingStylingOfAnotherSpan(Landroid/text/Spanned;Ljava/lang/CharSequence;)Landroid/text/SpannableString;
+@@ -663,12 +735,12 @@
+ 
+     return-object p0
+ 
+-    :cond_0
++    :cond_1
+     add-int/lit8 v2, v2, 0x1
+ 
+     goto :goto_0
+ 
+-    :cond_1
++    :cond_2
+     return-object p0
+ .end method
+ 
+--- a/app/revanced/extension/music/utils/ExtendedUtils.smali
++++ b/app/revanced/extension/music/utils/ExtendedUtils.smali
+@@ -66,17 +66,26 @@
+ .method public static openSearch()V
+     .locals 2
+ 
++    sget-object v0, Lapp/revanced/extension/music/patches/navigation/NavigationPatch;->nativeSearchView:Landroid/view/View;
++
++    if-eqz v0, :cond_0
++
++    invoke-virtual {v0}, Landroid/view/View;->performClick()Z
++
++    return-void
++
+     .line 26
++    :cond_0
+     invoke-static {}, Lapp/revanced/extension/shared/utils/Utils;->getActivity()Landroid/app/Activity;
+ 
+     move-result-object v0
+ 
+-    if-nez v0, :cond_0
++    if-nez v0, :cond_1
+ 
+     return-void
+ 
+     .line 30
+-    :cond_0
++    :cond_1
+     new-instance v1, Landroid/content/Intent;
+ 
+     invoke-direct {v1}, Landroid/content/Intent;-><init>()V
+--- a/jew.smali
++++ b/jew.smali
+@@ -601,20 +601,40 @@
+ 
+     .line 22
+     const/4 v0, 0x1
++
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++
+     const/4 v0, 0x2
++
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setShowAsAction(I)V
++
+     const v0, 0x7f0b0067
++
+     invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
++
+     move-result-object v3
+-    if-eqz v3, :native_history_search_done
++
++    if-eqz v3, :cond_0
++
+     invoke-interface {v3}, Landroid/view/MenuItem;->getActionView()Landroid/view/View;
++
+     move-result-object v0
+-    if-eqz v0, :native_history_search_done
++
++    if-eqz v0, :cond_0
++
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setActionView(Landroid/view/View;)Landroid/view/MenuItem;
++
++    sput-object v0, Lapp/revanced/extension/music/patches/navigation/NavigationPatch;->nativeSearchView:Landroid/view/View;
++
+     const/4 v0, 0x0
++
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++
++    const/4 v0, 0x0
++
+     invoke-interface {v3, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
+-    :native_history_search_done
++
++    :cond_0
+     return-void
+ .end method
+ 
+--- a/jjf.smali
++++ b/jjf.smali
+@@ -51,20 +51,40 @@
+ 
+     .line 12
+     const/4 v0, 0x1
++
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++
+     const/4 v0, 0x2
++
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setShowAsAction(I)V
++
+     const v0, 0x7f0b0067
++
+     invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
++
+     move-result-object v3
+-    if-eqz v3, :native_history_search_done
++
++    if-eqz v3, :cond_0
++
+     invoke-interface {v3}, Landroid/view/MenuItem;->getActionView()Landroid/view/View;
++
+     move-result-object v0
+-    if-eqz v0, :native_history_search_done
++
++    if-eqz v0, :cond_0
++
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setActionView(Landroid/view/View;)Landroid/view/MenuItem;
++
++    sput-object v0, Lapp/revanced/extension/music/patches/navigation/NavigationPatch;->nativeSearchView:Landroid/view/View;
++
+     const/4 v0, 0x0
++
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++
++    const/4 v0, 0x0
++
+     invoke-interface {v3, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
+-    :native_history_search_done
++
++    :cond_0
+     return-void
+ .end method
+ 
+--- a/lac.smali
++++ b/lac.smali
+@@ -610,13 +610,28 @@
+     .line 10
+     check-cast p1, Lbrso;
+ 
++    iget-object v0, p1, Lbrso;->e:Ljava/lang/String;
++
++    const-string v1, "FEmusic_home"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    invoke-static {}, Lapp/revanced/extension/music/utils/ExtendedUtils;->openSearch()V
++
++    return-void
++
+     .line 11
+     .line 12
++    :cond_0
+     iget-object v0, p0, Llac;->n:Laodh;
+ 
+     .line 13
+     .line 14
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     .line 15
+     .line 16
+@@ -628,7 +643,7 @@
+ 
+     .line 19
+     .line 20
+-    if-eqz v1, :cond_0
++    if-eqz v1, :cond_1
+ 
+     .line 21
+     .line 22
+@@ -657,7 +672,7 @@
+ 
+     .line 34
+     .line 35
+-    :cond_0
++    :cond_1
+     iget v0, p1, Lbrso;->b:I
+ 
+     .line 36
+@@ -666,7 +681,7 @@
+ 
+     .line 38
+     .line 39
+-    if-eqz v0, :cond_2
++    if-eqz v0, :cond_3
+ 
+     .line 40
+     .line 41
+@@ -678,7 +693,7 @@
+ 
+     .line 44
+     .line 45
+-    if-nez v1, :cond_1
++    if-nez v1, :cond_2
+ 
+     .line 46
+     .line 47
+@@ -687,12 +702,12 @@
+     .line 48
+     .line 49
+     .line 50
+-    :cond_1
++    :cond_2
+     invoke-interface {v0, v1}, Lamat;->a(Lbjue;)V
+ 
+     .line 51
+     .line 52
+-    :cond_2
++    :cond_3
+     iget-object v0, p1, Lbrso;->e:Ljava/lang/String;
+ 
+     .line 53
+@@ -709,7 +724,7 @@
+ 
+     .line 59
+     .line 60
+-    if-eqz v0, :cond_4
++    if-eqz v0, :cond_5
+ 
+     .line 61
+     .line 62
+@@ -725,7 +740,7 @@
+ 
+     .line 67
+     .line 68
+-    if-nez v0, :cond_3
++    if-nez v0, :cond_4
+ 
+     .line 69
+     .line 70
+@@ -757,7 +772,7 @@
+ 
+     .line 83
+     .line 84
+-    :cond_3
++    :cond_4
+     iget-object v0, p0, Llac;->r:Ldh;
+ 
+     .line 85
+@@ -874,7 +889,7 @@
+ 
+     .line 143
+     .line 144
+-    :cond_4
++    :cond_5
+     iget-object v0, p1, Lbrso;->e:Ljava/lang/String;
+ 
+     .line 145
+@@ -891,7 +906,7 @@
+ 
+     .line 151
+     .line 152
+-    if-nez v0, :cond_9
++    if-nez v0, :cond_a
+ 
+     .line 153
+     .line 154
+@@ -899,7 +914,7 @@
+ 
+     .line 155
+     .line 156
+-    if-nez v0, :cond_5
++    if-nez v0, :cond_6
+ 
+     .line 157
+     .line 158
+@@ -907,7 +922,7 @@
+ 
+     .line 159
+     .line 160
+-    :cond_5
++    :cond_6
+     sget-object v1, Lcom/google/protos/youtube/api/innertube/BrowseEndpointOuterClass;->browseEndpoint:Lbhbi;
+ 
+     .line 161
+@@ -941,7 +956,7 @@
+ 
+     .line 176
+     .line 177
+-    if-nez v0, :cond_7
++    if-nez v0, :cond_8
+ 
+     .line 178
+     .line 179
+@@ -953,7 +968,7 @@
+ 
+     .line 182
+     .line 183
+-    if-nez p1, :cond_6
++    if-nez p1, :cond_7
+ 
+     .line 184
+     .line 185
+@@ -962,7 +977,7 @@
+     .line 186
+     .line 187
+     .line 188
+-    :cond_6
++    :cond_7
+     invoke-interface {v0, p1}, Lamat;->a(Lbjue;)V
+ 
+     .line 189
+@@ -970,7 +985,7 @@
+ 
+     .line 190
+     .line 191
+-    :cond_7
++    :cond_8
+     iget-object v0, p0, Llac;->e:Llar;
+ 
+     .line 192
+@@ -983,7 +998,7 @@
+ 
+     .line 196
+     .line 197
+-    if-nez p1, :cond_8
++    if-nez p1, :cond_9
+ 
+     .line 198
+     .line 199
+@@ -992,7 +1007,7 @@
+     .line 200
+     .line 201
+     .line 202
+-    :cond_8
++    :cond_9
+     invoke-interface {v0, v1, p1}, Llar;->e(Ljava/lang/String;Lbjue;)V
+ 
+     .line 203
+@@ -1000,7 +1015,7 @@
+ 
+     .line 204
+     .line 205
+-    :cond_9
++    :cond_a
+     iget-object p1, p0, Llac;->e:Llar;
+ 
+     .line 206
