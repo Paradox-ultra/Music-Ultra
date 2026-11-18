@@ -1,0 +1,10 @@
+{
+  "asset": "Music-Ultra.apk",
+  "sha256": "31fcec28b32d40965918d653f48e4141dbf85695e6c73169a1b0f58d9639c242",
+  "bytes": 89486855,
+  "package": "app.rvx.android.apps.youtube.musix",
+  "label": "Music Ultra",
+  "certificate_sha256": "0264ff06fdbe7aaa7f0995fa2c5ee2c0a645528cbc5ad26838d16f671fc81a04",
+  "phone_confirmed": true,
+  "phone_confirmed_scope": "launch, native search, bottom tab behavior and final outline icons"
+}

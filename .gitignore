@@ -1,0 +1,9 @@
+*.apk
+*.idsig
+*.jks
+*.keystore
+*.pk8
+*.pem
+*.pass
+secrets/
+work/
