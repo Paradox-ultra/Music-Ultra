@@ -1,0 +1,298 @@
+--- a/app/revanced/extension/music/patches/general/GeneralPatch.smali
++++ b/app/revanced/extension/music/patches/general/GeneralPatch.smali
+@@ -346,31 +346,8 @@
+ .end method
+ 
+ .method public static hideHistoryButton(Z)Z
+-    .locals 1
+-
+-    .line 83
+-    sget-object v0, Lapp/revanced/extension/music/settings/Settings;->HIDE_HISTORY_BUTTON:Lapp/revanced/extension/shared/settings/BooleanSetting;
+-
+-    invoke-virtual {v0}, Lapp/revanced/extension/shared/settings/BooleanSetting;->get()Ljava/lang/Boolean;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
+-
+-    move-result v0
+-
+-    if-nez v0, :cond_0
+-
+-    if-eqz p0, :cond_0
+-
+-    const/4 p0, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_0
++    .locals 0
+     const/4 p0, 0x0
+-
+-    :goto_0
+     return p0
+ .end method
+ 
+@@ -398,32 +375,7 @@
+ .end method
+ 
+ .method public static hideSearchButton(Landroid/view/View;)V
+-    .locals 2
+-
+-    .line 93
+-    sget-object v0, Lapp/revanced/extension/music/settings/Settings;->HIDE_SEARCH_BUTTON:Lapp/revanced/extension/shared/settings/BooleanSetting;
+-
+-    invoke-virtual {v0}, Lapp/revanced/extension/shared/settings/BooleanSetting;->get()Ljava/lang/Boolean;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    .line 94
+-    new-instance v0, Landroid/widget/LinearLayout$LayoutParams;
+-
+-    const/4 v1, 0x0
+-
+-    invoke-direct {v0, v1, v1}, Landroid/widget/LinearLayout$LayoutParams;-><init>(II)V
+-
+-    .line 95
+-    invoke-virtual {p0, v0}, Landroid/view/View;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
+-
+-    :cond_0
++    .locals 0
+     return-void
+ .end method
+ 
+--- a/com/google/android/apps/youtube/music/search/SearchActionProvider.smali
++++ b/com/google/android/apps/youtube/music/search/SearchActionProvider.smali
+@@ -203,12 +203,7 @@
+ 
+ .method public final e()Z
+     .locals 1
+-
+-    .line 1
+-    .line 2
+-    iget-boolean v0, p0, Lcom/google/android/apps/youtube/music/search/SearchActionProvider;->i:Z
+-
+-    .line 3
++    const/4 v0, 0x1
+     return v0
+ .end method
+ 
+--- a/jew.smali
++++ b/jew.smali
+@@ -554,7 +554,7 @@
+ .end method
+ 
+ .method public final b(Landroid/view/Menu;)V
+-    .locals 2
++    .locals 3
+ 
+     .line 1
+     .line 2
+@@ -588,7 +588,7 @@
+     invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
+ 
+     .line 18
+-    move-result-object p1
++    move-result-object v2
+ 
+     invoke-static {v1}, Lapp/revanced/extension/music/patches/general/GeneralPatch;->hideHistoryButton(Z)Z
+ 
+@@ -597,9 +597,18 @@
+     .line 19
+     .line 20
+     .line 21
+-    invoke-interface {p1, v1}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++    invoke-interface {v2, v1}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
+ 
+     .line 22
++    const v0, 0x7f0b0067
++    invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
++    move-result-object v2
++    if-eqz v2, :native_search_done
++    const/4 v0, 0x1
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++    const/4 v0, 0x2
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setShowAsAction(I)V
++    :native_search_done
+     return-void
+ .end method
+ 
+--- a/jid.smali
++++ b/jid.smali
+@@ -4977,12 +4977,124 @@
+     .line 9
+     if-ne v0, v1, :cond_0
+ 
+-    invoke-virtual {p0}, Ldb;->requireActivity()Ldh;
+-    move-result-object v0
+-    new-instance v1, Lcom/google/android/apps/youtube/music/search/SearchActionProvider;
+-    invoke-direct {v1, v0}, Lcom/google/android/apps/youtube/music/search/SearchActionProvider;-><init>(Landroid/content/Context;)V
+-    const/4 v0, 0x0
+-    invoke-virtual {v1, v0}, Lcom/google/android/apps/youtube/music/search/SearchActionProvider;->onClick(Landroid/view/View;)V
++    .line 10
++    .line 11
++    const-string p1, "FEmusic_history"
++
++    .line 12
++    .line 13
++    invoke-static {p1}, Lkif;->b(Ljava/lang/String;)Lbjue;
++
++    .line 14
++    .line 15
++    .line 16
++    move-result-object p1
++
++    .line 17
++    invoke-virtual {p1}, Lbhbk;->toBuilder()Lbhbd;
++
++    .line 18
++    .line 19
++    .line 20
++    move-result-object p1
++
++    .line 21
++    check-cast p1, Lbjud;
++
++    .line 22
++    .line 23
++    sget-object v0, Lbqwj;->b:Lbhbi;
++
++    .line 24
++    .line 25
++    sget-object v1, Lbqwl;->a:Lbqwl;
++
++    .line 26
++    .line 27
++    invoke-virtual {v1}, Lbhbk;->createBuilder()Lbhbd;
++
++    .line 28
++    .line 29
++    .line 30
++    move-result-object v1
++
++    .line 31
++    check-cast v1, Lbqwk;
++
++    .line 32
++    .line 33
++    invoke-virtual {v1}, Lbhbd;->copyOnWrite()V
++
++    .line 34
++    .line 35
++    .line 36
++    iget-object v3, v1, Lbqwk;->instance:Lbhbk;
++
++    .line 37
++    .line 38
++    check-cast v3, Lbqwl;
++
++    .line 39
++    .line 40
++    iget v4, v3, Lbqwl;->b:I
++
++    .line 41
++    .line 42
++    or-int/lit8 v4, v4, 0x2
++
++    .line 43
++    .line 44
++    iput v4, v3, Lbqwl;->b:I
++
++    .line 45
++    .line 46
++    const v4, 0x28f5e
++
++    .line 47
++    .line 48
++    .line 49
++    iput v4, v3, Lbqwl;->d:I
++
++    .line 50
++    .line 51
++    invoke-virtual {v1}, Lbhbd;->build()Lbhbk;
++
++    .line 52
++    .line 53
++    .line 54
++    move-result-object v1
++
++    .line 55
++    check-cast v1, Lbqwl;
++
++    .line 56
++    .line 57
++    invoke-virtual {p1, v0, v1}, Lbhbf;->e(Lbhar;Ljava/lang/Object;)V
++
++    .line 58
++    .line 59
++    .line 60
++    iget-object v0, p0, Ljid;->b:Lamat;
++
++    .line 61
++    .line 62
++    invoke-virtual {p1}, Lbhbd;->build()Lbhbk;
++
++    .line 63
++    .line 64
++    .line 65
++    move-result-object p1
++
++    .line 66
++    check-cast p1, Lbjue;
++
++    .line 67
++    .line 68
++    invoke-interface {v0, p1}, Lamat;->a(Lbjue;)V
++
++    .line 69
++    .line 70
++    .line 71
+     return v2
+ 
+     .line 72
+--- a/jjf.smali
++++ b/jjf.smali
+@@ -22,7 +22,7 @@
+ 
+ # virtual methods
+ .method public final b(Landroid/view/Menu;)V
+-    .locals 1
++    .locals 3
+ 
+     .line 1
+     .line 2
+@@ -35,7 +35,7 @@
+     invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
+ 
+     .line 7
+-    move-result-object p1
++    move-result-object v2
+ 
+     .line 8
+     const/4 v0, 0x1
+@@ -47,9 +47,18 @@
+     .line 9
+     .line 10
+     .line 11
+-    invoke-interface {p1, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
+ 
+     .line 12
++    const v0, 0x7f0b0067
++    invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
++    move-result-object v2
++    if-eqz v2, :native_search_done
++    const/4 v0, 0x1
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++    const/4 v0, 0x2
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setShowAsAction(I)V
++    :native_search_done
+     return-void
+ .end method
+ 
