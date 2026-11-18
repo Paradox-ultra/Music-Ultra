@@ -1,0 +1,414 @@
+--- a/kzv.smali
++++ b/kzv.smali
+@@ -76,7 +76,7 @@
+     move-result v2
+ 
+     .line 21
+-    if-eqz v2, :cond_8
++    if-eqz v2, :cond_b
+ 
+     .line 22
+     .line 23
+@@ -159,8 +159,49 @@
+     .line 62
+     check-cast v3, Landroid/widget/ImageView;
+ 
++    iget-object v6, v2, Lbrso;->e:Ljava/lang/String;
++
++    const-string v7, "FEmusic_home"
++
++    invoke-virtual {v7, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v7
++
++    if-eqz v7, :cond_2
++
++    const v6, 0x7f080a65
++
++    goto/16 :goto_4
++
++    :cond_2
++    const-string v7, "FEmusic_library"
++
++    invoke-virtual {v6, v7}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result v7
++
++    if-eqz v7, :cond_3
++
++    const v6, 0x7f08092f
++
++    goto/16 :goto_4
++
++    :cond_3
++    const-string v7, "FEmusic_explore"
++
++    invoke-virtual {v6, v7}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result v7
++
++    if-eqz v7, :cond_4
++
++    const v6, 0x7f080956
++
++    goto/16 :goto_4
++
+     .line 63
+     .line 64
++    :cond_4
+     iget-object v5, v0, Llac;->d:Lbacz;
+ 
+     .line 65
+@@ -176,7 +217,7 @@
+     const/4 v7, 0x5
+ 
+     .line 71
+-    if-ne v6, v7, :cond_2
++    if-ne v6, v7, :cond_5
+ 
+     .line 72
+     .line 73
+@@ -191,7 +232,7 @@
+     goto :goto_1
+ 
+     .line 78
+-    :cond_2
++    :cond_5
+     sget-object v2, Lbmlk;->a:Lbmlk;
+ 
+     .line 79
+@@ -209,7 +250,7 @@
+     move-result-object v2
+ 
+     .line 86
+-    if-nez v2, :cond_3
++    if-nez v2, :cond_6
+ 
+     .line 87
+     .line 88
+@@ -217,7 +258,7 @@
+ 
+     .line 89
+     .line 90
+-    :cond_3
++    :cond_6
+     invoke-virtual {v5}, Lpoy;->c()V
+ 
+     .line 91
+@@ -235,7 +276,7 @@
+     move-result v6
+ 
+     .line 99
+-    if-eqz v6, :cond_5
++    if-eqz v6, :cond_8
+ 
+     .line 100
+     .line 101
+@@ -243,7 +284,7 @@
+ 
+     .line 102
+     .line 103
+-    if-eqz v4, :cond_4
++    if-eqz v4, :cond_7
+ 
+     .line 104
+     .line 105
+@@ -259,7 +300,7 @@
+     move-result v7
+ 
+     .line 111
+-    if-eqz v7, :cond_4
++    if-eqz v7, :cond_7
+ 
+     .line 112
+     .line 113
+@@ -282,7 +323,7 @@
+     goto :goto_2
+ 
+     .line 122
+-    :cond_4
++    :cond_7
+     iget-object v7, v5, Lpoy;->e:Ljava/util/EnumMap;
+ 
+     .line 123
+@@ -308,15 +349,15 @@
+     move-result v6
+ 
+     .line 134
+-    if-eqz v6, :cond_5
++    if-eqz v6, :cond_8
+ 
+     .line 135
+     .line 136
+     goto :goto_4
+ 
+     .line 137
+-    :cond_5
+-    if-eqz v4, :cond_6
++    :cond_8
++    if-eqz v4, :cond_9
+ 
+     .line 138
+     .line 139
+@@ -332,7 +373,7 @@
+     move-result v4
+ 
+     .line 145
+-    if-eqz v4, :cond_6
++    if-eqz v4, :cond_9
+ 
+     .line 146
+     .line 147
+@@ -355,7 +396,7 @@
+     goto :goto_3
+ 
+     .line 156
+-    :cond_6
++    :cond_9
+     iget-object v4, v5, Lpoy;->b:Ljava/util/EnumMap;
+ 
+     .line 157
+@@ -373,7 +414,7 @@
+     .line 163
+     .line 164
+     :goto_3
+-    if-eqz v2, :cond_7
++    if-eqz v2, :cond_a
+ 
+     .line 165
+     .line 166
+@@ -388,7 +429,7 @@
+     goto :goto_4
+ 
+     .line 171
+-    :cond_7
++    :cond_a
+     const/4 v6, 0x0
+ 
+     .line 172
+@@ -402,7 +443,7 @@
+ 
+     .line 176
+     .line 177
+-    :cond_8
++    :cond_b
+     :goto_5
+     return-void
+ .end method
+--- a/kzy.smali
++++ b/kzy.smali
+@@ -215,7 +215,7 @@
+ 
+     .line 85
+     .line 86
+-    goto/16 :goto_5
++    goto/16 :goto_6
+ 
+     .line 87
+     .line 88
+@@ -256,7 +256,7 @@
+ 
+     .line 105
+     .line 106
+-    if-eqz v5, :cond_b
++    if-eqz v5, :cond_d
+ 
+     .line 107
+     .line 108
+@@ -379,7 +379,7 @@
+ 
+     .line 167
+     .line 168
+-    if-ne v9, v10, :cond_7
++    if-ne v9, v10, :cond_9
+ 
+     .line 169
+     .line 170
+@@ -427,11 +427,42 @@
+     .line 189
+     .line 190
+     .line 191
++    iget-object v9, v5, Lbrso;->e:Ljava/lang/String;
++
++    const-string v10, "FEmusic_home"
++
++    invoke-virtual {v10, v9}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v10
++
++    if-eqz v10, :cond_7
++
++    const v9, 0x7f080a65
++
++    goto :goto_3
++
++    :cond_7
++    const-string v10, "FEmusic_library"
++
++    invoke-virtual {v9, v10}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result v10
++
++    if-eqz v10, :cond_8
++
++    const v9, 0x7f08092f
++
++    goto :goto_3
++
++    :cond_8
++    const v9, 0x7f080956
++
++    :goto_3
+     invoke-virtual {v7, v9}, Landroid/widget/ImageView;->setImageResource(I)V
+ 
+     .line 192
+     .line 193
+-    :cond_7
++    :cond_9
+     iget v7, v5, Lbrso;->b:I
+ 
+     .line 194
+@@ -440,7 +471,7 @@
+ 
+     .line 196
+     .line 197
+-    if-eqz v7, :cond_8
++    if-eqz v7, :cond_a
+ 
+     .line 198
+     .line 199
+@@ -448,24 +479,24 @@
+ 
+     .line 200
+     .line 201
+-    if-nez v7, :cond_9
++    if-nez v7, :cond_b
+ 
+     .line 202
+     .line 203
+     sget-object v7, Lblwb;->a:Lblwb;
+ 
+     .line 204
+-    goto :goto_3
++    goto :goto_4
+ 
+     .line 205
+-    :cond_8
++    :cond_a
+     const/4 v7, 0x0
+ 
+     .line 206
+     .line 207
+     .line 208
+-    :cond_9
+-    :goto_3
++    :cond_b
++    :goto_4
+     invoke-static {v7}, Layan;->b(Lblwb;)Landroid/text/Spanned;
+ 
+     .line 209
+@@ -511,7 +542,7 @@
+ 
+     .line 228
+     .line 229
+-    if-eqz v6, :cond_a
++    if-eqz v6, :cond_c
+ 
+     .line 230
+     .line 231
+@@ -539,21 +570,21 @@
+ 
+     .line 242
+     .line 243
+-    if-eqz v6, :cond_a
++    if-eqz v6, :cond_c
+ 
+     .line 244
+     move v6, v4
+ 
+     .line 245
+-    goto :goto_4
++    goto :goto_5
+ 
+     .line 246
+-    :cond_a
++    :cond_c
+     move v6, v0
+ 
+     .line 247
+     .line 248
+-    :goto_4
++    :goto_5
+     iget-object v8, v1, Llac;->j:Lcom/google/android/material/tabs/TabLayout;
+ 
+     .line 249
+@@ -638,7 +669,7 @@
+ 
+     .line 287
+     .line 288
+-    :cond_b
++    :cond_d
+     iget-object v0, v1, Llac;->e:Llar;
+ 
+     .line 289
+@@ -665,7 +696,7 @@
+ 
+     .line 301
+     .line 302
+-    if-eqz v0, :cond_c
++    if-eqz v0, :cond_e
+ 
+     .line 303
+     .line 304
+@@ -686,13 +717,13 @@
+ 
+     .line 312
+     .line 313
+-    :cond_c
+-    :goto_5
++    :cond_e
++    :goto_6
+     iget-object v0, v1, Llac;->n:Laodh;
+ 
+     .line 314
+     .line 315
+-    if-eqz v0, :cond_d
++    if-eqz v0, :cond_f
+ 
+     .line 316
+     .line 317
+@@ -704,7 +735,7 @@
+ 
+     .line 320
+     .line 321
+-    if-eqz v0, :cond_d
++    if-eqz v0, :cond_f
+ 
+     .line 322
+     .line 323
+@@ -717,7 +748,7 @@
+ 
+     .line 327
+     .line 328
+-    :cond_d
++    :cond_f
+     iget-object v0, v1, Llac;->t:Llak;
+ 
+     .line 329
+@@ -726,14 +757,14 @@
+ 
+     .line 331
+     .line 332
+-    if-nez p1, :cond_e
++    if-nez p1, :cond_10
+ 
+     .line 333
+     return-void
+ 
+     .line 334
+     .line 335
+-    :cond_e
++    :cond_10
+     iget-object p1, p1, Lanjx;->a:Lbnau;
+ 
+     .line 336
