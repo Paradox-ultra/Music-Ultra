@@ -1,0 +1,215 @@
+--- a/app/revanced/extension/music/patches/general/GeneralPatch.smali
++++ b/app/revanced/extension/music/patches/general/GeneralPatch.smali
+@@ -346,8 +346,31 @@
+ .end method
+ 
+ .method public static hideHistoryButton(Z)Z
+-    .locals 0
++    .locals 1
++
++    .line 83
++    sget-object v0, Lapp/revanced/extension/music/settings/Settings;->HIDE_HISTORY_BUTTON:Lapp/revanced/extension/shared/settings/BooleanSetting;
++
++    invoke-virtual {v0}, Lapp/revanced/extension/shared/settings/BooleanSetting;->get()Ljava/lang/Boolean;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
++
++    move-result v0
++
++    if-nez v0, :cond_0
++
++    if-eqz p0, :cond_0
++
++    const/4 p0, 0x1
++
++    goto :goto_0
++
++    :cond_0
+     const/4 p0, 0x0
++
++    :goto_0
+     return p0
+ .end method
+ 
+--- a/com/google/android/apps/youtube/music/search/SearchActionProvider.smali
++++ b/com/google/android/apps/youtube/music/search/SearchActionProvider.smali
+@@ -203,7 +203,12 @@
+ 
+ .method public final e()Z
+     .locals 1
+-    const/4 v0, 0x1
++
++    .line 1
++    .line 2
++    iget-boolean v0, p0, Lcom/google/android/apps/youtube/music/search/SearchActionProvider;->i:Z
++
++    .line 3
+     return v0
+ .end method
+ 
+@@ -262,87 +267,8 @@
+ 
+     .line 21
+     .line 22
+-    iget-object v1, p0, Lcom/google/android/apps/youtube/music/search/SearchActionProvider;->g:Lahdj;
+-
+-    .line 23
+-    .line 24
+-    .line 25
+-    invoke-interface {v1}, Lahdj;->l()Z
+-
+-    .line 26
+-    move-result v1
+-
+-    .line 27
+-    .line 28
+-    if-eqz v1, :cond_0
+-
+-    .line 29
+-    .line 30
+     sget-object v1, Lkhq;->a:Lkhq;
+ 
+-    .line 31
+-    goto :goto_0
+-
+-    .line 32
+-    .line 33
+-    :cond_0
+-    iget-object v1, p0, Lcom/google/android/apps/youtube/music/search/SearchActionProvider;->h:Loka;
+-
+-    .line 34
+-    .line 35
+-    .line 36
+-    invoke-virtual {v1}, Loka;->a()Z
+-
+-    .line 37
+-    move-result v1
+-
+-    .line 38
+-    .line 39
+-    if-eqz v1, :cond_1
+-
+-    .line 40
+-    .line 41
+-    sget-object v1, Lkhq;->d:Lkhq;
+-
+-    .line 42
+-    goto :goto_0
+-
+-    .line 43
+-    .line 44
+-    :cond_1
+-    iget-object v1, p0, Lcom/google/android/apps/youtube/music/search/SearchActionProvider;->h:Loka;
+-
+-    .line 45
+-    .line 46
+-    iget-object v2, p0, Lbal;->c:Landroid/content/Context;
+-
+-    .line 47
+-    .line 48
+-    .line 49
+-    invoke-virtual {v1, v2}, Loka;->b(Landroid/content/Context;)Z
+-
+-    .line 50
+-    move-result v1
+-
+-    .line 51
+-    .line 52
+-    if-eqz v1, :cond_2
+-
+-    .line 53
+-    .line 54
+-    sget-object v1, Lkhq;->c:Lkhq;
+-
+-    .line 55
+-    goto :goto_0
+-
+-    .line 56
+-    .line 57
+-    :cond_2
+-    sget-object v1, Lkhq;->a:Lkhq;
+-
+-    .line 58
+-    .line 59
+-    :goto_0
+     const-string v2, "default_search_tab_id"
+ 
+     .line 60
+--- a/jew.smali
++++ b/jew.smali
+@@ -554,7 +554,7 @@
+ .end method
+ 
+ .method public final b(Landroid/view/Menu;)V
+-    .locals 3
++    .locals 4
+ 
+     .line 1
+     .line 2
+@@ -600,15 +600,21 @@
+     invoke-interface {v2, v1}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
+ 
+     .line 22
+-    const v0, 0x7f0b0067
+-    invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
+-    move-result-object v2
+-    if-eqz v2, :native_search_done
+     const/4 v0, 0x1
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
+     const/4 v0, 0x2
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setShowAsAction(I)V
+-    :native_search_done
++    const v0, 0x7f0b0067
++    invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
++    move-result-object v3
++    if-eqz v3, :native_history_search_done
++    invoke-interface {v3}, Landroid/view/MenuItem;->getActionView()Landroid/view/View;
++    move-result-object v0
++    if-eqz v0, :native_history_search_done
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setActionView(Landroid/view/View;)Landroid/view/MenuItem;
++    const/4 v0, 0x0
++    invoke-interface {v3, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++    :native_history_search_done
+     return-void
+ .end method
+ 
+--- a/jjf.smali
++++ b/jjf.smali
+@@ -22,7 +22,7 @@
+ 
+ # virtual methods
+ .method public final b(Landroid/view/Menu;)V
+-    .locals 3
++    .locals 4
+ 
+     .line 1
+     .line 2
+@@ -50,15 +50,21 @@
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
+ 
+     .line 12
+-    const v0, 0x7f0b0067
+-    invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
+-    move-result-object v2
+-    if-eqz v2, :native_search_done
+     const/4 v0, 0x1
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
+     const/4 v0, 0x2
+     invoke-interface {v2, v0}, Landroid/view/MenuItem;->setShowAsAction(I)V
+-    :native_search_done
++    const v0, 0x7f0b0067
++    invoke-interface {p1, v0}, Landroid/view/Menu;->findItem(I)Landroid/view/MenuItem;
++    move-result-object v3
++    if-eqz v3, :native_history_search_done
++    invoke-interface {v3}, Landroid/view/MenuItem;->getActionView()Landroid/view/View;
++    move-result-object v0
++    if-eqz v0, :native_history_search_done
++    invoke-interface {v2, v0}, Landroid/view/MenuItem;->setActionView(Landroid/view/View;)Landroid/view/MenuItem;
++    const/4 v0, 0x0
++    invoke-interface {v3, v0}, Landroid/view/MenuItem;->setVisible(Z)Landroid/view/MenuItem;
++    :native_history_search_done
+     return-void
+ .end method
+ 
